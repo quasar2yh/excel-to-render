@@ -42,32 +42,30 @@ pandas >= 3.0.1     # 데이터 처리
 
 ### 기본 설정
 
-```bash
+```powershell
 # 의존성 설치 (uv 사용 권장)
 uv sync
+
+# 또는 pip 사용
+pip install ezdxf openpyxl pandas
 ```
 
 ### 1️⃣ Excel to DXF 변환
 
-**입력 Excel 형식 예시:**
-```
-
-```
-
 **기본 변환:**
-```bash
-uv run src/excel_to_dxf.py \
-  --input sample/excel_blueprint2.xlsx \
-  --output sample/generated_floor_plan.dxf
+```powershell
+python src\excel_to_dxf.py `
+  --input sample\excel_blueprint2.xlsx `
+  --output sample\generated_floor_plan.dxf
 ```
 
 **옵션 지정:**
-```bash
-uv run src/excel_to_dxf.py \
-  --input sample/excel_blueprint2.xlsx \
-  --output output.dxf \
-  --cell-width 30.0 \
-  --cell-height 30.0 \
+```powershell
+python src\excel_to_dxf.py `
+  --input sample\excel_blueprint2.xlsx `
+  --output output.dxf `
+  --cell-width 30.0 `
+  --cell-height 30.0 `
   --unit cm
 ```
 
@@ -84,16 +82,17 @@ Blender 렌더러는 가장 고도화된 시각화 솔루션으로, 실사적인
 
 #### 기본 실행
 
-```bash
-cd renderers/blender
+```powershell
+cd renderers\blender
 
-# PowerShell을 통한 자동 실행
-./render.ps1
-
-# Blender Python API로 직접 실행 (권장)
-blender --background --python render_dxf.py -- \
-  ../../sample/generated_floor_plan.dxf output.png
+# 기본 실행
+.\render.ps1 ..\..\sample\generated_floor_plan.dxf .\output.png
 ```
+
+**동작 원리:**
+- `render.ps1` 자동으로 Blender 실행 파일 검색 (PATH 또는 Program Files)
+- 상대/절대 경로 자동 처리
+- 모든 옵션을 후행 파라미터로 전달
 
 #### 주요 고도화 기능
 
@@ -107,21 +106,34 @@ blender --background --python render_dxf.py -- \
 | **3D 그림자** | 현실적인 그림자 및 조명 |
 | **고급 조명** | Sun + Area light 이중 조명 시스템 |
 
-#### 상세 옵션
+#### 상세 옵션 사용법
 
-```bash
-blender --background --python render_dxf.py -- \
-  input.dxf output.png \
-  --cam-dist 1.5 \
-  --cam-pitch 45.0 \
-  --cam-yaw 20.0 \
-  --unit-scale 1.0 \
-  --text-size 12.0 \
-  --text-thickness 0.5 \
-  --text-shadow 0.2 \
-  --color \
-  --material \
+```powershell
+cd renderers\blender
+
+.\render.ps1 input.dxf output.png `
+  --cam-dist 1.5 `
+  --cam-pitch 45.0 `
+  --cam-yaw 20.0 `
+  --unit-scale 1.0 `
+  --text-size 12.0 `
+  --text-thickness 0.5 `
+  --text-shadow 0.2 `
+  --color `
+  --material `
   --clip-end 100000.0
+```
+
+**모든 옵션 요약:**
+
+```powershell
+.\render.ps1 <input_dxf> <output_png> [options]
+
+# 필수 파라미터
+.\render.ps1 input.dxf output.png
+
+# 옵션만 전달 (경로는 기본값 사용)
+.\render.ps1 --cam-dist 2.0 --cam-pitch 35
 ```
 
 **파라미터 설명:**
@@ -343,87 +355,103 @@ blueprint/
 
 ## 💡 실전 사용 예제
 
-### 예제 1: 기본 파이프라인 (Excel → 모든 렌더러)
+### 예제 1: 기본 파이프라인 (Excel → 최종 렌더링)
 
-```bash
+```powershell
 # 1단계: Excel을 DXF로 변환
-python src/excel_to_dxf.py \
-  --input sample/excel_blueprint2.xlsx \
-  --output floor_plan.dxf \
-  --cell-width 30 \
-  --cell-height 30 \
+python src\excel_to_dxf.py `
+  --input sample\excel_blueprint2.xlsx `
+  --output floor_plan.dxf `
+  --cell-width 30 `
+  --cell-height 30 `
   --unit cm
 
-# 2단계: 웹에서 빠르게 확인
-cd renderers/dxf-threejs
-npm install && npm run dev
-# → 브라우저: http://localhost:5173
-
-# 3단계: Blender로 프리미엄 렌더링
-cd ../blender
-blender --background --python render_dxf.py -- \
-  ../../floor_plan.dxf final_render.png \
-  --cam-pitch 35 --cam-yaw 45 --material --color
+# 2단계: Blender로 프리미엄 렌더링
+cd renderers\blender
+.\render.ps1 ..\..\floor_plan.dxf .\final_render.png `
+  --cam-pitch 35 `
+  --cam-yaw 45 `
+  --material `
+  --color
 ```
 
-### 예제 2: Blender 고급 렌더링 (다양한 앵글)
+### 예제 2: 다양한 앵글 렌더링
 
-```bash
-cd renderers/blender
+```powershell
+cd renderers\blender
 
-# 정면도 렌더링 (높이감 있는 정면)
-blender --background --python render_dxf.py -- \
-  ../../floor_plan.dxf front_view.png \
-  --cam-pitch 15 --cam-yaw 0 --cam-dist 1.5 \
-  --material --color --text-size 12
+# 정면도 (높이감)
+.\render.ps1 ..\..\floor_plan.dxf .\front_view.png `
+  --cam-pitch 15 `
+  --cam-yaw 0 `
+  --cam-dist 1.5 `
+  --material `
+  --color `
+  --text-size 12
 
-# 사시도 렌더링 (입체감 최고)
-blender --background --python render_dxf.py -- \
-  ../../floor_plan.dxf isometric_view.png \
-  --cam-pitch 35 --cam-yaw 45 --cam-dist 1.8 \
-  --material --color
+# 사시도 (입체감)
+.\render.ps1 ..\..\floor_plan.dxf .\isometric_view.png `
+  --cam-pitch 35 `
+  --cam-yaw 45 `
+  --cam-dist 1.8 `
+  --material `
+  --color
 
-# 평면도 렌더링 (탑뷰)
-blender --background --python render_dxf.py -- \
-  ../../floor_plan.dxf top_view.png \
-  --cam-pitch 85 --cam-yaw 0 --cam-dist 1.2 \
+# 평면도 (탑뷰)
+.\render.ps1 ..\..\floor_plan.dxf .\top_view.png `
+  --cam-pitch 85 `
+  --cam-yaw 0 `
+  --cam-dist 1.2 `
   --material
 
 # 상세 선반 뷰 (가까운 거리)
-blender --background --python render_dxf.py -- \
-  ../../floor_plan.dxf shelf_detail.png \
-  --cam-pitch 30 --cam-yaw 30 --cam-dist 0.8 \
-  --material --text-size 14 --text-shadow 0.3
+.\render.ps1 ..\..\floor_plan.dxf .\shelf_detail.png `
+  --cam-pitch 30 `
+  --cam-yaw 30 `
+  --cam-dist 0.8 `
+  --material `
+  --text-size 14 `
+  --text-shadow 0.3
 ```
 
 ### 예제 3: 단위 변환 (mm → meters)
 
-```bash
-# Excel 입력: 모든 치수가 mm 단위
-python src/excel_to_dxf.py \
-  --input blueprint_mm.xlsx \
-  --output blueprint_m.dxf \
-  --unit cm \
-  --cell-width 30 \
+```powershell
+# Excel을 DXF로 변환 (단위: cm)
+python src\excel_to_dxf.py `
+  --input blueprint_mm.xlsx `
+  --output blueprint_cm.dxf `
+  --unit cm `
+  --cell-width 30 `
   --cell-height 30
 
-# Blender에서 mm 단위 파일을 meters로 스케일
-blender --background --python render_dxf.py -- \
-  blueprint_m.dxf output.png \
-  --unit-scale 0.01  # mm → cm 변환 (1/100)
+# Blender에서 cm → m 단위 스케일 적용
+cd renderers\blender
+.\render.ps1 ..\..\blueprint_cm.dxf .\output.png `
+  --unit-scale 0.01
 ```
+
+**설명:**
+- `--unit-scale 0.01`: cm → m 변환 (cm 값에 0.01을 곱함)
+- 다른 변환: mm→cm (0.1), m→cm (100) 등
 
 ### 예제 4: 텍스트 라벨 정밀 조정
 
-```bash
-blender --background --python render_dxf.py -- \
-  floor_plan.dxf with_labels.png \
-  --text-size 10.0 \          # 텍스트 높이
-  --text-thickness 0.5 \      # 2D 굵기 (선택)
-  --text-shadow 0.25 \        # 3D 깊이 (그림자)
-  --material \
+```powershell
+cd renderers\blender
+
+.\render.ps1 ..\..\floor_plan.dxf .\with_labels.png `
+  --text-size 10.0 `
+  --text-thickness 0.5 `
+  --text-shadow 0.25 `
+  --material `
   --color
 ```
+
+**텍스트 옵션:**
+- `--text-size 10.0`: 텍스트 높이 (기본값: 12.0)
+- `--text-thickness 0.5`: 2D 굵기 (기본값: 0.0)
+- `--text-shadow 0.25`: 3D 깊이/그림자 (기본값: 0.2)
 
 ### 예제 5: Python API 직접 사용
 
@@ -443,37 +471,66 @@ convert_excel_to_dxf(
 # 또는 Blender/Open Cascade로 자동 처리
 ```
 
-### 예제 6: 배치 처리 (다중 렌더링)
+### 예제 6: 배치 처리 (다중 렌더링 자동화)
 
-```bash
-#!/bin/bash
-# 여러 뷰를 동시에 생성
+```powershell
+cd renderers\blender
 
-INPUT="floor_plan.dxf"
-OUTPUT_DIR="renders"
-mkdir -p $OUTPUT_DIR
+# 출력 디렉토리 생성
+if (-not (Test-Path ".\renders")) {
+  New-Item -ItemType Directory -Path ".\renders" | Out-Null
+}
 
-# Blender 배치 처리
-for PITCH in 0 30 45 60; do
-  for YAW in 0 45 90 135; do
-    OUTPUT="${OUTPUT_DIR}/view_p${PITCH}_y${YAW}.png"
-    blender --background --python renderers/blender/render_dxf.py -- \
-      $INPUT $OUTPUT \
-      --cam-pitch $PITCH --cam-yaw $YAW \
-      --material --color
-  done
-done
+# 다양한 각도로 자동 렌더링
+$pitches = @(0, 30, 45, 60)
+$yaws = @(0, 45, 90, 135)
+
+foreach ($pitch in $pitches) {
+  foreach ($yaw in $yaws) {
+    $output = ".\renders\view_p${pitch}_y${yaw}.png"
+    Write-Host "Rendering: $output"
+
+    .\render.ps1 ..\..\floor_plan.dxf $output `
+      --cam-pitch $pitch `
+      --cam-yaw $yaw `
+      --material `
+      --color
+  }
+}
+
+Write-Host "배치 처리 완료! renders\ 폴더 확인"
 ```
 
-### 예제 7: Open Cascade로 정확한 기하학 렌더링
+### 예제 7: 실전 렌더링 조합
 
-```bash
-cd renderers/open-cascade
+```powershell
+# 메인 DXF 생성
+python src\excel_to_dxf.py `
+  --input sample\excel_blueprint2.xlsx `
+  --output my_blueprint.dxf `
+  --cell-width 40 `
+  --cell-height 40 `
+  --unit cm
 
-# 기본 렌더링
-python renderer.py ../../floor_plan.dxf blueprint_occ.png
+cd renderers\blender
 
-# 또는 다른 엔지니어링 소프트웨어에서 사용할 정밀 데이터 생성
+# 빠른 프리뷰 (낮은 품질)
+.\render.ps1 ..\..\my_blueprint.dxf .\preview.png `
+  --cam-dist 2.0 `
+  --cam-pitch 30 `
+  --unit-scale 1.0
+
+# 최종 고품질 렌더링
+.\render.ps1 ..\..\my_blueprint.dxf .\final.png `
+  --cam-dist 1.8 `
+  --cam-pitch 35 `
+  --cam-yaw 45 `
+  --text-size 8 `
+  --text-thickness 0.05 `
+  --text-shadow 0.2 `
+  --material `
+  --color `
+  --clip-end 100000
 ```
 
 ## 🔧 지원하는 단위
