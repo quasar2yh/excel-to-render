@@ -1,0 +1,11 @@
+{
+  "name": "blueprint-blender-renderer",
+  "version": "1.0.0",
+  "description": "Blender-based automated rendering for DXF blueprints.",
+  "scripts": {
+    "render": "powershell -File ./render.ps1 ../../sample/floor_plan.dxf ./output.png"
+  },
+  "keywords": ["blender", "dxf", "rendering", "automation"],
+  "author": "Antigravity",
+  "license": "MIT"
+}

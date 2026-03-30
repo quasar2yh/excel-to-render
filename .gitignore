@@ -1,0 +1,30 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.venv_libs/
+renderers/**/.venv/
+
+# Dependencies
+renderers/**/node_modules/
+renderers/**/__pycache__/
+
+# Generated output
+sample/generated_*
+*.dxf
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

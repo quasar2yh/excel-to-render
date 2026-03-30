@@ -1,0 +1,2 @@
+import_scene ops: ['fbx', 'gltf']
+import_dxf ops: []

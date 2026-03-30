@@ -1,0 +1,11 @@
+{
+  "name": "renderer-open-cascade",
+  "version": "1.0.0",
+  "description": "Open CASCADE automated renderer for DXF",
+  "main": "renderer.py",
+  "scripts": {
+    "render": "powershell ./render.ps1 ../../sample/floor_plan.dxf ./output.png"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
