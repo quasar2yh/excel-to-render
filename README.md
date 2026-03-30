@@ -1,4 +1,5 @@
 # BluePrint - Excel to CAD Rendering Platform
+<img width="732" height="567" alt="image" src="https://github.com/user-attachments/assets/61e6cb24-73cc-4868-aab2-a4742141c60b" />
 
 Excel 도면을 DXF(CAD) 형식으로 변환하고, 여러 렌더러를 통해 2D/3D 시각화하는 플랫폼입니다.
 
